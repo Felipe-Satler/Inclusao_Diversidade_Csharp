@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Inclusão & Diversidade API
 
 API REST em **ASP.NET Core 8** para o tema ESG **Inclusão e diversidade corporativa**.
@@ -114,3 +115,6 @@ Buscar por `TODO` no código. Principais:
    contratação, treinamentos, candidatos) com paginação e os respectivos testes.
 5. **Fábrica de testes** — trocar o provider por EF Core InMemory em
    `CustomWebApplicationFactory` quando o DbContext existir.
+=======
+# Inclusao_Diversidade_Csharp
+>>>>>>> 0dc48a3cc7f5952f80f52443f3776b2347955faa
