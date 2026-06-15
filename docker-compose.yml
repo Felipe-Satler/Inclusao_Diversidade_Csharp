@@ -1,0 +1,37 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: inclusao-diversidade-api
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      # A connection string será definida na etapa de banco de dados, ex.:
+      # - ConnectionStrings__DefaultConnection=...
+    # depends_on:
+    #   - db
+
+  # ===========================================================================
+  # TODO (etapa de banco): descomente e configure o serviço do banco escolhido.
+  #
+  # --- Opção SQL Server ---
+  # db:
+  #   image: mcr.microsoft.com/mssql/server:2022-latest
+  #   container_name: inclusao-diversidade-db
+  #   environment:
+  #     - ACCEPT_EULA=Y
+  #     - MSSQL_SA_PASSWORD=Sua_Senha_Forte123
+  #   ports:
+  #     - "1433:1433"
+  #
+  # --- Opção Oracle XE ---
+  # db:
+  #   image: gvenzl/oracle-xe:21-slim
+  #   container_name: inclusao-diversidade-db
+  #   environment:
+  #     - ORACLE_PASSWORD=oracle
+  #   ports:
+  #     - "1521:1521"
+  # ===========================================================================

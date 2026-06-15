@@ -1,0 +1,36 @@
+## .NET / Visual Studio
+bin/
+obj/
+out/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Rider / VS Code
+.idea/
+.vs/
+.vscode/*
+# mantém configs úteis do VS Code no repositório
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/extensions.json
+
+## Build / publish
+publish/
+*.dll
+*.pdb
+
+## Testes / cobertura
+[Tt]est[Rr]esults/
+coverage/
+*.coverage
+*.trx
+
+## Ambiente
+*.env
+appsettings.*.local.json

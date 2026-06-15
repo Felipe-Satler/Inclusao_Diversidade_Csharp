@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Camada de Domínio (Model no MVVM).
+    Contém entidades e interfaces de repositório. NÃO referencia outras camadas
+    e NÃO depende de frameworks (EF Core, ASP.NET, etc.).
+    As entidades (Departamento, Vaga, Colaborador, Candidato, TreinamentoLog)
+    serão adicionadas na etapa de modelagem.
+  -->
+
+</Project>
