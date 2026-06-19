@@ -33,13 +33,16 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
         builder.ConfigureServices(services =>
         {
-            // Remove o registro do DbContext Oracle...
-            var descriptor = services.SingleOrDefault(
-                d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
-            if (descriptor is not null)
+            // Remove TODO registro relacionado ao DbContext Oracle (robusto contra
+            // múltiplos registros de AddDbContext) e substitui por InMemory.
+            var toRemove = services.Where(d =>
+                d.ServiceType == typeof(DbContextOptions<AppDbContext>) ||
+                d.ServiceType == typeof(DbContextOptions) ||
+                d.ServiceType == typeof(AppDbContext)).ToList();
+
+            foreach (var descriptor in toRemove)
                 services.Remove(descriptor);
 
-            // ...e substitui por um banco em memória para os testes.
             services.AddDbContext<AppDbContext>(options =>
                 options
                     .UseInMemoryDatabase("InclusaoDiversidadeTests")

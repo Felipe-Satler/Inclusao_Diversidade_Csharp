@@ -19,7 +19,7 @@ Dois formatos equivalentes (use o que o professor pedir):
 1. Suba a API: `dotnet run --project src/InclusaoDiversidade.Api`.
 2. **Auth → Gerar token (admin)** (`admin` / `admin123`).
    - No **Postman**, o `access_token` é salvo automaticamente em `{{token}}` (script de teste).
-   - No **Insomnia**, copie o `access_token` da resposta e cole na variável `token` do Base Environment.
+   - No **Insomnia**, copie o `dados.access_token` da resposta e cole na variável `token` do Base Environment.
 3. **Departamentos → Listar** — endpoint público e paginado.
 4. **Vagas → Abrir vaga (Administrador)** — usa o Bearer token.
 5. **Vagas → Registrar candidato** — em vaga afirmativa, a Trigger 2 soma +2 ao score.

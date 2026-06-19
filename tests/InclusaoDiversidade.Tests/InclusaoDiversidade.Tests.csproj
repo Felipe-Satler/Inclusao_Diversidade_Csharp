@@ -19,8 +19,8 @@
 
     <!-- Testes de integração de controllers -->
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.8" />
-    <!-- Permite testar sem banco real (substitui o provider na fábrica de testes) -->
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.8" />
+    <!-- Provider InMemory alinhado ao EF Core 8.0.11 da solução -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.11" />
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
   </ItemGroup>
 

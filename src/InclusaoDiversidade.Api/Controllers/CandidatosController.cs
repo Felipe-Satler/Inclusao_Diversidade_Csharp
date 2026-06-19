@@ -1,45 +1,36 @@
+using InclusaoDiversidade.Application.Common.Interfaces;
+using InclusaoDiversidade.Application.Common.Models;
+using InclusaoDiversidade.Application.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using InclusaoDiversidade.Domain;
-using InclusaoDiversidade.Infrastructure.Data;
-using Microsoft.AspNetCore.Authorization;
 
 namespace InclusaoDiversidade.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-// [Authorize] // Mantive comentado para facilitar o seu primeiro teste sem precisar do Token
+[Route("[controller]")]
 public class CandidatosController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    private readonly ICandidatoService _service;
+    public CandidatosController(ICandidatoService service) => _service = service;
 
-    // Injeta o banco de dados que configuramos no Program.cs
-    public CandidatosController(AppDbContext context)
-    {
-        _context = context;
-    }
-
-    // --------------------------------------------------------
-    // ROTA GET: Buscar todos os candidatos (Teste de Leitura)
-    // --------------------------------------------------------
+    /// <summary>
+    /// Lista todos os candidatos (paginado), ordenados por Score de Diversidade (desc).
+    /// Para inscrever um candidato em uma vaga, use POST /vagas/{id}/candidatos.
+    /// </summary>
+    /// <remarks>GET /candidatos?pagina=1&amp;tamanho=10</remarks>
     [HttpGet]
-    public async Task<IActionResult> GetCandidatos()
+    public async Task<IActionResult> Listar(
+        [FromQuery(Name = "pagina")] int pagina = 1,
+        [FromQuery(Name = "tamanho")] int tamanho = 10,
+        CancellationToken ct = default)
     {
-        var candidatos = await _context.TbCandidatos.ToListAsync();
-        return Ok(candidatos);
-    }
+        var paginacao = new PaginationQuery { Page = pagina, PageSize = tamanho };
+        var resultado = await _service.ListarTodosAsync(paginacao, ct);
 
-    // --------------------------------------------------------
-    // ROTA POST: Inserir novo candidato (Teste da Trigger)
-    // --------------------------------------------------------
-    [HttpPost]
-    public async Task<IActionResult> PostCandidato([FromBody] TbCandidato candidato)
-    {
-        _context.TbCandidatos.Add(candidato);
-        
-        // É neste momento que o C# envia o comando pro Oracle e a sua Trigger 2 é ativada!
-        await _context.SaveChangesAsync(); 
-        
-        return CreatedAtAction(nameof(GetCandidatos), new { id = candidato.IdCandidato }, candidato);
+        return Ok(new RespostaCandidatos
+        {
+            Mensagem = "Lista de candidatos resgatada com sucesso.",
+            Candidatos = resultado.Items,
+            Paginacao = PaginacaoMetadados.De(resultado)
+        });
     }
 }

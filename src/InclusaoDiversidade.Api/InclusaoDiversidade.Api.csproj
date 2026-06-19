@@ -2,26 +2,21 @@
 
   <!--
     Camada de Apresentação (View no MVVM): controllers RESTful.
-    Projeto de inicialização (startup) e usado pelo `dotnet ef`.
+    Projeto de inicialização (startup) e usado pelo dotnet ef.
   -->
 
   <PropertyGroup>
-    <!-- Habilita `dotnet user-secrets` para manter a connection string fora do repositório -->
+    <!-- Habilita dotnet user-secrets para manter a connection string fora do repositório -->
     <UserSecretsId>inclusao-diversidade-api</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
-    <PackageReference Include="Oracle.EntityFrameworkCore" Version="8.*" />
+    <PackageReference Include="Oracle.EntityFrameworkCore" Version="8.23.90" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-<<<<<<< HEAD
-=======
-    <!-- Necessário para rodar `dotnet ef` a partir do projeto de startup -->
-<<<<<<< HEAD
->>>>>>> 9afd1eb92a612d68c42265b614376f950340cdde
-=======
->>>>>>> 9afd1eb92a612d68c42265b614376f950340cdde
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.*">
+
+    <!-- Necessário para rodar dotnet ef a partir do projeto de startup (alinhado à Infra) -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

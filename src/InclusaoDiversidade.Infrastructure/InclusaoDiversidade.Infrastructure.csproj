@@ -6,38 +6,20 @@
   -->
 
   <ItemGroup>
-<<<<<<< HEAD
-=======
-    <!-- EF Core (núcleo, independente de provider) -->
-<<<<<<< HEAD
->>>>>>> 9afd1eb92a612d68c42265b614376f950340cdde
-=======
->>>>>>> 9afd1eb92a612d68c42265b614376f950340cdde
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.28" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+    <!-- EF Core -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.28" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.11">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Oracle.EntityFrameworkCore" Version="8.*" />
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 9afd1eb92a612d68c42265b614376f950340cdde
 
-    <!-- ===================================================================== -->
-    <!-- TODO (etapa de banco): descomente APENAS o provider escolhido.         -->
-    <!-- Opção Oracle (banco da FIAP):                                          -->
-    <!-- <PackageReference Include="Oracle.EntityFrameworkCore" Version="8.23.40" /> -->
-    <!-- Opção SQL Server (local / Visual Studio):                              -->
-    <!-- <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" /> -->
-    <!-- ===================================================================== -->
->>>>>>> 9afd1eb92a612d68c42265b614376f950340cdde
+    <!-- Provider Oracle para EF Core -->
+    <PackageReference Include="Oracle.EntityFrameworkCore" Version="8.23.90" />
 
     <!-- Autenticação: geração de tokens JWT -->
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.2" />

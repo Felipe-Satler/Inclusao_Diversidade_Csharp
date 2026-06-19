@@ -28,7 +28,13 @@ public class VagasController : ControllerBase
     public async Task<IActionResult> Abrir([FromBody] AbrirVagaRequest request, CancellationToken ct)
     {
         var vaga = await _vagaService.AbrirAsync(request, ct);
-        return CreatedAtAction(nameof(ListarCandidatos), new { id = vaga.Id }, vaga);
+
+        var corpo = new RespostaVaga
+        {
+            Mensagem = $"Vaga '{vaga.Cargo}' (#{vaga.IdVaga}) aberta com sucesso.",
+            Vaga = vaga
+        };
+        return CreatedAtAction(nameof(ListarCandidatos), new { id = vaga.IdVaga }, corpo);
     }
 
     /// <summary>
@@ -42,7 +48,12 @@ public class VagasController : ControllerBase
         int id, [FromBody] AtualizarStatusVagaRequest request, CancellationToken ct)
     {
         var vaga = await _vagaService.AtualizarStatusAsync(id, request, ct);
-        return Ok(vaga);
+
+        return Ok(new RespostaVaga
+        {
+            Mensagem = $"Status da vaga #{id} atualizado para '{vaga.Status}' com sucesso.",
+            Vaga = vaga
+        });
     }
 
     /// <summary>
@@ -57,7 +68,13 @@ public class VagasController : ControllerBase
     {
         var paginacao = new PaginationQuery { Page = pagina, PageSize = tamanho };
         var resultado = await _candidatoService.ListarPorVagaAsync(id, paginacao, ct);
-        return Ok(resultado);
+
+        return Ok(new RespostaCandidatos
+        {
+            Mensagem = $"Candidatos da vaga #{id} resgatados com sucesso.",
+            Candidatos = resultado.Items,
+            Paginacao = PaginacaoMetadados.De(resultado)
+        });
     }
 
     /// <summary>
@@ -69,6 +86,12 @@ public class VagasController : ControllerBase
         int id, [FromBody] RegistrarCandidatoRequest request, CancellationToken ct)
     {
         var candidato = await _candidatoService.RegistrarAsync(id, request, ct);
-        return CreatedAtAction(nameof(ListarCandidatos), new { id }, candidato);
+
+        var corpo = new RespostaCandidato
+        {
+            Mensagem = $"Candidato '{candidato.Nome}' inscrito na vaga #{id} com sucesso.",
+            Candidato = candidato
+        };
+        return CreatedAtAction(nameof(ListarCandidatos), new { id }, corpo);
     }
 }

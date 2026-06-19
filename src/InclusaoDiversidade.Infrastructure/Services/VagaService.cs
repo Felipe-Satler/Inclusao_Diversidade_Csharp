@@ -15,15 +15,15 @@ public class VagaService : IVagaService
 
     public async Task<VagaDto> AbrirAsync(AbrirVagaRequest request, CancellationToken ct = default)
     {
-        var flag = request.FlagAfirmativa.ToUpperInvariant();
+        var afirmativa = request.Afirmativa.ToUpperInvariant();
 
         var departamento = await _db.TbDepartamentos
-            .FirstOrDefaultAsync(d => d.IdDep == request.FkDep, ct)
-            ?? throw new KeyNotFoundException($"Departamento {request.FkDep} não encontrado.");
+            .FirstOrDefaultAsync(d => d.IdDep == request.IdDepartamento, ct)
+            ?? throw new KeyNotFoundException($"Departamento {request.IdDepartamento} não encontrado.");
 
         // Espelha a regra da Trigger 4 (bloqueio de vaga não inclusiva), retornando
         // um 400 amigável antes mesmo de o gatilho do banco ser acionado.
-        if (flag == "N" && (departamento.MetaDiversidade ?? 0m) < LimiarDiversidade)
+        if (afirmativa == "N" && (departamento.MetaDiversidade ?? 0m) < LimiarDiversidade)
         {
             throw new InvalidOperationException(
                 $"Abertura bloqueada: o departamento '{departamento.NomeDep}' possui meta de " +
@@ -37,8 +37,8 @@ public class VagaService : IVagaService
         {
             IdVaga = proximoId,
             Cargo = request.Cargo,
-            FkDep = request.FkDep,
-            FlagAfirmativa = flag,
+            FkDep = request.IdDepartamento,
+            FlagAfirmativa = afirmativa,
             Status = "ABERTA"
         };
 

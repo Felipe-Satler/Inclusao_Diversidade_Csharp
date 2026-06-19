@@ -43,8 +43,24 @@ public class CandidatoService : ICandidatoService
         // Ordena por Score (desc): mesma ordem usada pela Trigger 1 (transparência).
         var query = _db.TbCandidatos.AsNoTracking()
             .Where(c => c.FkVaga == idVaga)
-            .OrderByDescending(c => c.ScoreDiversidade);
+            .OrderByDescending(c => c.ScoreDiversidade)
+            .ThenBy(c => c.IdCandidato);
 
+        return await PaginarAsync(query, p, ct);
+    }
+
+    public async Task<PagedResult<CandidatoDto>> ListarTodosAsync(PaginationQuery p, CancellationToken ct = default)
+    {
+        var query = _db.TbCandidatos.AsNoTracking()
+            .OrderByDescending(c => c.ScoreDiversidade)
+            .ThenBy(c => c.IdCandidato);
+
+        return await PaginarAsync(query, p, ct);
+    }
+
+    private static async Task<PagedResult<CandidatoDto>> PaginarAsync(
+        IQueryable<TbCandidato> query, PaginationQuery p, CancellationToken ct)
+    {
         var total = await query.CountAsync(ct);
 
         var itens = await query

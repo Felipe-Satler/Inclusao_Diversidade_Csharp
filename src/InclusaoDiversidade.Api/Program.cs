@@ -1,37 +1,11 @@
-using Microsoft.EntityFrameworkCore;
 using InclusaoDiversidade.Api.Extensions;
 using InclusaoDiversidade.Api.Middleware;
 using InclusaoDiversidade.Application;
+using InclusaoDiversidade.Application.Common.Models;
 using InclusaoDiversidade.Infrastructure;
-using InclusaoDiversidade.Infrastructure.Data; // <-- Comentado temporariamente
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Pega a string do appsettings.json
-var connectionString = builder.Configuration.GetConnectionString("OracleConnection");
-
-<<<<<<< HEAD
-=======
-// ---------------------------------------------------------------------------
-// 🚨 ATENÇÃO: BLOCO COMENTADO TEMPORARIAMENTE PARA O SCAFFOLD RODAR
-// Como apagamos o AppDbContext para o EF recriá-lo, o projeto precisa compilar sem ele primeiro.
-// Descomente este bloco DEPOIS que o comando scaffold gerar as classes com sucesso!
-// ---------------------------------------------------------------------------
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseOracle(connectionString));
-
-
->>>>>>> 9afd1eb92a612d68c42265b614376f950340cdde
-// ---------------------------------------------------------------------------
-// 🚨 ATENÇÃO: BLOCO COMENTADO TEMPORARIAMENTE PARA O SCAFFOLD RODAR
-// Como apagamos o AppDbContext para o EF recriá-lo, o projeto precisa compilar sem ele primeiro.
-// Descomente este bloco DEPOIS que o comando scaffold gerar as classes com sucesso!
-// ---------------------------------------------------------------------------
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseOracle(connectionString));
-
 
 // ---------------------------------------------------------------------------
 // Composição das camadas
@@ -43,6 +17,31 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+// Erros de validação (400) no mesmo formato padronizado da API
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var erros = context.ModelState
+            .Where(kvp => kvp.Value is not null && kvp.Value.Errors.Count > 0)
+            .SelectMany(kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage))
+            .Where(m => !string.IsNullOrWhiteSpace(m))
+            .ToList();
+
+        var resposta = new ErrorResponse
+        {
+            Sucesso = false,
+            Mensagem = erros.Count > 0
+                ? string.Join(" ", erros)
+                : "Requisição inválida: verifique os dados enviados.",
+            StatusCode = StatusCodes.Status400BadRequest,
+            Path = context.HttpContext.Request.Path
+        };
+
+        return new BadRequestObjectResult(resposta);
+    };
+});
 
 // Autenticação/Autorização (JWT) e Swagger com suporte a Bearer
 builder.Services.AddJwtAuthentication(builder.Configuration);
@@ -58,11 +57,9 @@ var app = builder.Build();
 // Tratamento global de exceções (cedo no pipeline)
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// Swagger sempre habilitado: a aplicação abre direto na documentação.
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
@@ -70,6 +67,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// A raiz redireciona para o Swagger (ex.: https://localhost:5001 -> /swagger).
+app.MapGet("/", () => Results.Redirect("/swagger"));
 
 app.Run();
 

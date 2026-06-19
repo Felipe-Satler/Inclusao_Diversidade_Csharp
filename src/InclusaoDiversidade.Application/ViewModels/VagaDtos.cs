@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations;
 namespace InclusaoDiversidade.Application.ViewModels;
 
 public record VagaDto(
-    int Id,
+    int IdVaga,
     string Cargo,
     string? Status,
-    string? FlagAfirmativa,
-    short? FkDep);
+    string? Afirmativa,
+    short? IdDepartamento);
 
 /// <summary>Dados para abertura de uma vaga (POST /vagas).</summary>
 public class AbrirVagaRequest
@@ -16,11 +16,11 @@ public class AbrirVagaRequest
     public string Cargo { get; set; } = string.Empty;
 
     [Required]
-    public short FkDep { get; set; }
+    public short IdDepartamento { get; set; }
 
     [Required]
-    [RegularExpression("^[SNsn]$", ErrorMessage = "FlagAfirmativa deve ser 'S' ou 'N'.")]
-    public string FlagAfirmativa { get; set; } = "N";
+    [RegularExpression("^[SNsn]$", ErrorMessage = "O campo 'afirmativa' deve ser 'S' ou 'N'.")]
+    public string Afirmativa { get; set; } = "N";
 }
 
 /// <summary>Dados para atualização de status da vaga (PATCH /vagas/{id}/status).</summary>

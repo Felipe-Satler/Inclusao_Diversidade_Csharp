@@ -1,5 +1,6 @@
 using InclusaoDiversidade.Application.Common.Interfaces;
 using InclusaoDiversidade.Application.Common.Models;
+using InclusaoDiversidade.Application.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InclusaoDiversidade.Api.Controllers;
@@ -23,6 +24,12 @@ public class DepartamentosController : ControllerBase
     {
         var paginacao = new PaginationQuery { Page = pagina, PageSize = tamanho };
         var resultado = await _service.ListarAsync(paginacao, ct);
-        return Ok(resultado);
+
+        return Ok(new RespostaDepartamentos
+        {
+            Mensagem = "Lista de departamentos resgatada com sucesso.",
+            Departamentos = resultado.Items,
+            Paginacao = PaginacaoMetadados.De(resultado)
+        });
     }
 }

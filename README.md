@@ -33,10 +33,11 @@ dependem de **interfaces** (`Application/Common/Interfaces`) e **DTOs**, nunca d
 - Acesso ao banco Oracle da FIAP (ou um Oracle XE local)
 - (Opcional) Docker e Docker Compose
 
-## Configuração de segredos (connection string)
+## Configuração da connection string
 
-A senha do banco **não fica no repositório**. O `appsettings.json` contém apenas um
-modelo com `SEU_RM` / `SUA_SENHA`. Forneça a connection string real por um destes meios:
+Para fins acadêmicos/de teste, a connection string (com usuário e senha) está
+**hardcoded** no `appsettings.json`. Em um cenário real, o recomendado é mantê-la
+**fora do repositório**, por um destes meios:
 
 **Desenvolvimento — User Secrets** (recomendado; o arquivo fica fora do projeto):
 
@@ -62,8 +63,12 @@ export ConnectionStrings__OracleConnection="Data Source=...;User Id=SEU_RM;Passw
 dotnet restore
 dotnet build
 dotnet run --project src/InclusaoDiversidade.Api
-# Swagger em https://localhost:5001/swagger
 ```
+
+A aplicação **abre direto no Swagger**: `https://localhost:5001/swagger/index.html`
+(ou `http://localhost:5000/swagger/index.html`). A raiz (`/`) também redireciona para o
+Swagger. Na primeira execução com HTTPS, rode `dotnet dev-certs https --trust` se o
+navegador reclamar do certificado.
 
 ### Via Docker
 
@@ -81,12 +86,46 @@ docker compose up --build
 | PATCH  | `/vagas/{id}/status`              | Administrador | Atualiza status; `PREENCHIDA` dispara Triggers 1 e 3 |
 | GET    | `/vagas/{id}/candidatos`          | Público       | Candidatos da vaga, ordenados por Score (desc), paginado |
 | POST   | `/vagas/{id}/candidatos`          | Público       | Inscreve candidato (Trigger 2 bonifica vaga afirmativa) |
+| GET    | `/candidatos`                     | Público       | Lista todos os candidatos (paginado, ordenado por Score) |
 | GET    | `/colaboradores/treinamentos`     | Público       | Colaboradores + treinamentos (paginado; filtro `status`) |
 | POST   | `/auth/token`                     | Público       | Token JWT de demonstração |
 | GET    | `/health`                         | Público       | Verificação de saúde |
 
-Paginação por query string: `?pagina=1&tamanho=10`. A resposta vem encapsulada em
-`PagedResult` (`items`, `page`, `pageSize`, `totalItems`, `totalPages`, `hasNext`).
+Paginação por query string: `?pagina=1&tamanho=10`.
+
+### Formato de resposta (envelope padronizado)
+
+Toda resposta segue o mesmo envelope, com `sucesso`, `mensagem` contextual e `dados`.
+Em listagens, os metadados de paginação ficam **aninhados** em `paginacao`:
+
+A coleção de dados tem um **nome contextual** por endpoint (`departamentos`,
+`candidatos`, `colaboradores`, `vaga`, `candidato`, `autenticacao`...) e os campos
+são descritivos. Exemplo de `GET /departamentos`:
+
+```json
+{
+  "sucesso": true,
+  "mensagem": "Lista de departamentos resgatada com sucesso.",
+  "departamentos": [
+    { "idDepartamento": 1, "nomeDepartamento": "Tecnologia", "metaDiversidadeDecimal": 0.5, "metaDiversidadePercentual": 50 }
+  ],
+  "paginacao": {
+    "pagina": 1,
+    "tamanho": 10,
+    "totalItens": 10,
+    "totalPaginas": 1,
+    "temProxima": false,
+    "temAnterior": false
+  }
+}
+```
+
+Erros usam o mesmo padrão (`sucesso: false`), com mensagens contextuais:
+
+- **401** — sem token em endpoint protegido, ou credenciais inválidas no login.
+- **403** — autenticado, mas sem o perfil `Administrador`.
+- **404** — recurso não encontrado (ex.: vaga inexistente).
+- **400** — validação de entrada ou bloqueio de regra de negócio (ex.: Trigger 4).
 
 ## Autenticação
 

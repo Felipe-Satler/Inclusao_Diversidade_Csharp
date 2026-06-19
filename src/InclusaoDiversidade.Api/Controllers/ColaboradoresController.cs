@@ -1,5 +1,6 @@
 using InclusaoDiversidade.Application.Common.Interfaces;
 using InclusaoDiversidade.Application.Common.Models;
+using InclusaoDiversidade.Application.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InclusaoDiversidade.Api.Controllers;
@@ -25,6 +26,12 @@ public class ColaboradoresController : ControllerBase
     {
         var paginacao = new PaginationQuery { Page = pagina, PageSize = tamanho };
         var resultado = await _service.ListarComTreinamentosAsync(paginacao, status, ct);
-        return Ok(resultado);
+
+        return Ok(new RespostaColaboradores
+        {
+            Mensagem = "Lista de treinamentos dos colaboradores resgatada com sucesso.",
+            Colaboradores = resultado.Items,
+            Paginacao = PaginacaoMetadados.De(resultado)
+        });
     }
 }

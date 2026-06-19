@@ -6,7 +6,7 @@ public record TreinamentoItemDto(
     string Status);
 
 public record ColaboradorTreinamentoDto(
-    int Id,
-    string Nome,
-    short? FkDep,
+    int IdColaborador,
+    string NomeColaborador,
+    short? IdDepartamento,
     IReadOnlyCollection<TreinamentoItemDto> Treinamentos);

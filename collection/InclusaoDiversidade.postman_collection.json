@@ -50,9 +50,10 @@
                 "type": "text/javascript",
                 "exec": [
                   "var data = pm.response.json();",
-                  "if (data && data.access_token) {",
-                  "    pm.collectionVariables.set('token', data.access_token);",
-                  "    console.log('Token salvo na variável {{token}}.');",
+                  "var token = data && data.dados ? data.dados.access_token : null;",
+                  "if (token) {",
+                  "    pm.collectionVariables.set('token', token);",
+                  "    console.log('Token salvo na variavel {{token}}.');",
                   "}"
                 ]
               }
@@ -125,7 +126,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"cargo\": \"Pessoa Desenvolvedora Jr\",\n  \"fkDep\": 1,\n  \"flagAfirmativa\": \"S\"\n}",
+              "raw": "{\n  \"cargo\": \"Pessoa Desenvolvedora Jr\",\n  \"idDepartamento\": 1,\n  \"afirmativa\": \"S\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -256,6 +257,42 @@
                   "language": "json"
                 }
               }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Candidatos",
+      "item": [
+        {
+          "name": "Listar todos os candidatos (paginado)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/candidatos?pagina=1&tamanho=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "candidatos"
+              ],
+              "query": [
+                {
+                  "key": "pagina",
+                  "value": "1"
+                },
+                {
+                  "key": "tamanho",
+                  "value": "10"
+                }
+              ]
             }
           }
         }

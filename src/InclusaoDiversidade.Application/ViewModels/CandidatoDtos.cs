@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations;
 namespace InclusaoDiversidade.Application.ViewModels;
 
 public record CandidatoDto(
-    int Id,
+    int IdCandidato,
     string Nome,
     decimal? ScoreDiversidade,
-    int? FkVaga);
+    int? IdVaga);
 
 /// <summary>Dados para inscrição de um candidato em uma vaga (POST /vagas/{id}/candidatos).</summary>
 public class RegistrarCandidatoRequest

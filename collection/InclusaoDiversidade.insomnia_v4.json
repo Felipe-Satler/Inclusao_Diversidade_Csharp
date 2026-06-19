@@ -57,13 +57,22 @@
       "metaSortKey": 3
     },
     {
+      "_id": "fld_candidatos",
+      "_type": "request_group",
+      "parentId": "wrk_inclusao",
+      "name": "Candidatos",
+      "description": "",
+      "environment": {},
+      "metaSortKey": 4
+    },
+    {
       "_id": "fld_colaboradores",
       "_type": "request_group",
       "parentId": "wrk_inclusao",
       "name": "Colaboradores",
       "description": "",
       "environment": {},
-      "metaSortKey": 4
+      "metaSortKey": 5
     },
     {
       "_id": "fld_health",
@@ -72,7 +81,7 @@
       "name": "Health",
       "description": "",
       "environment": {},
-      "metaSortKey": 5
+      "metaSortKey": 6
     },
     {
       "_id": "req_01",
@@ -81,7 +90,7 @@
       "name": "Gerar token (admin)",
       "method": "POST",
       "url": "{{ _.base_url }}/auth/token",
-      "description": "Copie o 'access_token' da resposta e cole na variável 'token' do Base Environment para usar nos endpoints protegidos.",
+      "description": "Copie o 'dados.access_token' da resposta e cole na variável 'token' do Base Environment para usar nos endpoints protegidos.",
       "headers": [
         {
           "name": "Content-Type",
@@ -93,7 +102,7 @@
         }
       ],
       "parameters": [],
-      "metaSortKey": 6,
+      "metaSortKey": 7,
       "body": {
         "mimeType": "application/json",
         "text": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
@@ -115,7 +124,7 @@
         }
       ],
       "parameters": [],
-      "metaSortKey": 7,
+      "metaSortKey": 8,
       "authentication": {}
     },
     {
@@ -137,10 +146,10 @@
         }
       ],
       "parameters": [],
-      "metaSortKey": 8,
+      "metaSortKey": 9,
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"cargo\": \"Pessoa Desenvolvedora Jr\",\n  \"fkDep\": 1,\n  \"flagAfirmativa\": \"S\"\n}"
+        "text": "{\n  \"cargo\": \"Pessoa Desenvolvedora Jr\",\n  \"idDepartamento\": 1,\n  \"afirmativa\": \"S\"\n}"
       },
       "authentication": {
         "type": "bearer",
@@ -166,7 +175,7 @@
         }
       ],
       "parameters": [],
-      "metaSortKey": 9,
+      "metaSortKey": 10,
       "body": {
         "mimeType": "application/json",
         "text": "{\n  \"status\": \"PREENCHIDA\"\n}"
@@ -191,7 +200,7 @@
         }
       ],
       "parameters": [],
-      "metaSortKey": 10,
+      "metaSortKey": 11,
       "authentication": {}
     },
     {
@@ -213,7 +222,7 @@
         }
       ],
       "parameters": [],
-      "metaSortKey": 11,
+      "metaSortKey": 12,
       "body": {
         "mimeType": "application/json",
         "text": "{\n  \"nome\": \"Candidato Teste\",\n  \"scoreDiversidade\": 7.0\n}"
@@ -222,6 +231,24 @@
     },
     {
       "_id": "req_07",
+      "_type": "request",
+      "parentId": "fld_candidatos",
+      "name": "Listar todos os candidatos (paginado)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/candidatos?pagina=1&tamanho=10",
+      "description": "",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "parameters": [],
+      "metaSortKey": 13,
+      "authentication": {}
+    },
+    {
+      "_id": "req_08",
       "_type": "request",
       "parentId": "fld_colaboradores",
       "name": "Listar treinamentos (filtro status)",
@@ -235,11 +262,11 @@
         }
       ],
       "parameters": [],
-      "metaSortKey": 12,
+      "metaSortKey": 14,
       "authentication": {}
     },
     {
-      "_id": "req_08",
+      "_id": "req_09",
       "_type": "request",
       "parentId": "fld_health",
       "name": "Health check",
@@ -253,7 +280,7 @@
         }
       ],
       "parameters": [],
-      "metaSortKey": 13,
+      "metaSortKey": 15,
       "authentication": {}
     }
   ]
