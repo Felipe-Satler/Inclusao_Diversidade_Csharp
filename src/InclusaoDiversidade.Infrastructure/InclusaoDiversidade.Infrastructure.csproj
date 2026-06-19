@@ -2,30 +2,21 @@
 
   <!--
     Camada de Infraestrutura.
-    Implementa persistência (DbContext + EF Core), repositórios e serviços
-    técnicos (geração de token JWT). O PROVIDER do banco (Oracle ou SQL Server)
-    será definido posteriormente — ver bloco comentado abaixo.
+    Persistência (AppDbContext + EF Core Oracle), serviços de negócio e JWT.
   -->
 
   <ItemGroup>
-    <!-- EF Core (núcleo, independente de provider) -->
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.28" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.28" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-
-    <!-- ===================================================================== -->
-    <!-- TODO (etapa de banco): descomente APENAS o provider escolhido.         -->
-    <!-- Opção Oracle (banco da FIAP):                                          -->
-    <!-- <PackageReference Include="Oracle.EntityFrameworkCore" Version="8.23.40" /> -->
-    <!-- Opção SQL Server (local / Visual Studio):                              -->
-    <!-- <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" /> -->
-    <!-- ===================================================================== -->
+    <PackageReference Include="Oracle.EntityFrameworkCore" Version="8.*" />
 
     <!-- Autenticação: geração de tokens JWT -->
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.2" />

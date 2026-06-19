@@ -1,5 +1,8 @@
 using InclusaoDiversidade.Application.Common.Interfaces;
 using InclusaoDiversidade.Infrastructure.Auth;
+using InclusaoDiversidade.Infrastructure.Data;
+using InclusaoDiversidade.Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,25 +19,27 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        // =====================================================================
-        // TODO (etapa de banco de dados): registrar o DbContext aqui.
-        // O provider (Oracle ou SQL Server) será decidido posteriormente.
-        //
-        // Exemplo Oracle:
-        //   services.AddDbContext<InclusaoDbContext>(opt =>
-        //       opt.UseOracle(configuration.GetConnectionString("DefaultConnection")));
-        //
-        // Exemplo SQL Server:
-        //   services.AddDbContext<InclusaoDbContext>(opt =>
-        //       opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-        // =====================================================================
+        // Banco de dados — Oracle (FIAP).
+        // A connection string "OracleConnection" deve ser fornecida via
+        // User Secrets (dev) ou variável de ambiente (Docker/produção).
+        var connectionString = configuration.GetConnectionString("OracleConnection")
+            ?? throw new InvalidOperationException(
+                "Connection string 'OracleConnection' não configurada. " +
+                "Defina-a via 'dotnet user-secrets' ou na variável de ambiente " +
+                "ConnectionStrings__OracleConnection.");
 
-        // Autenticação: vinculação das opções de JWT e serviço de geração de token
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseOracle(connectionString));
+
+        // Serviços de negócio (implementam os contratos da camada de Aplicação)
+        services.AddScoped<IDepartamentoService, DepartamentoService>();
+        services.AddScoped<IVagaService, VagaService>();
+        services.AddScoped<ICandidatoService, CandidatoService>();
+        services.AddScoped<IColaboradorService, ColaboradorService>();
+
+        // Autenticação: opções de JWT e serviço de geração de token
         services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
         services.AddScoped<IJwtTokenService, JwtTokenService>();
-
-        // TODO: registrar repositórios concretos conforme as entidades forem criadas,
-        // ex.: services.AddScoped<IVagaRepository, VagaRepository>();
 
         return services;
     }

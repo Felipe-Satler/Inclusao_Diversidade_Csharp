@@ -1,0 +1,260 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-06-19T13:00:00.000Z",
+  "__export_source": "inclusao-diversidade:gen",
+  "resources": [
+    {
+      "_id": "wrk_inclusao",
+      "_type": "workspace",
+      "parentId": null,
+      "name": "Inclusão & Diversidade API",
+      "description": "Coleção de testes da API ESG (FIAP). Defina base_url e token no Base Environment.",
+      "scope": "collection"
+    },
+    {
+      "_id": "env_base",
+      "_type": "environment",
+      "parentId": "wrk_inclusao",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:5000",
+        "token": ""
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "base_url",
+          "token"
+        ]
+      },
+      "metaSortKey": 1
+    },
+    {
+      "_id": "fld_auth",
+      "_type": "request_group",
+      "parentId": "wrk_inclusao",
+      "name": "Auth",
+      "description": "",
+      "environment": {},
+      "metaSortKey": 1
+    },
+    {
+      "_id": "fld_departamentos",
+      "_type": "request_group",
+      "parentId": "wrk_inclusao",
+      "name": "Departamentos",
+      "description": "",
+      "environment": {},
+      "metaSortKey": 2
+    },
+    {
+      "_id": "fld_vagas",
+      "_type": "request_group",
+      "parentId": "wrk_inclusao",
+      "name": "Vagas",
+      "description": "",
+      "environment": {},
+      "metaSortKey": 3
+    },
+    {
+      "_id": "fld_colaboradores",
+      "_type": "request_group",
+      "parentId": "wrk_inclusao",
+      "name": "Colaboradores",
+      "description": "",
+      "environment": {},
+      "metaSortKey": 4
+    },
+    {
+      "_id": "fld_health",
+      "_type": "request_group",
+      "parentId": "wrk_inclusao",
+      "name": "Health",
+      "description": "",
+      "environment": {},
+      "metaSortKey": 5
+    },
+    {
+      "_id": "req_01",
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Gerar token (admin)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/auth/token",
+      "description": "Copie o 'access_token' da resposta e cole na variável 'token' do Base Environment para usar nos endpoints protegidos.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "parameters": [],
+      "metaSortKey": 6,
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+      },
+      "authentication": {}
+    },
+    {
+      "_id": "req_02",
+      "_type": "request",
+      "parentId": "fld_departamentos",
+      "name": "Listar departamentos (paginado)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/departamentos?pagina=1&tamanho=10",
+      "description": "",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "parameters": [],
+      "metaSortKey": 7,
+      "authentication": {}
+    },
+    {
+      "_id": "req_03",
+      "_type": "request",
+      "parentId": "fld_vagas",
+      "name": "Abrir vaga (Administrador)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/vagas",
+      "description": "",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "parameters": [],
+      "metaSortKey": 8,
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"cargo\": \"Pessoa Desenvolvedora Jr\",\n  \"fkDep\": 1,\n  \"flagAfirmativa\": \"S\"\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      }
+    },
+    {
+      "_id": "req_04",
+      "_type": "request",
+      "parentId": "fld_vagas",
+      "name": "Atualizar status -> PREENCHIDA (Administrador)",
+      "method": "PATCH",
+      "url": "{{ _.base_url }}/vagas/101/status",
+      "description": "",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "parameters": [],
+      "metaSortKey": 9,
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"status\": \"PREENCHIDA\"\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      }
+    },
+    {
+      "_id": "req_05",
+      "_type": "request",
+      "parentId": "fld_vagas",
+      "name": "Listar candidatos da vaga (ordenado por score)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/vagas/101/candidatos?pagina=1&tamanho=10",
+      "description": "",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "parameters": [],
+      "metaSortKey": 10,
+      "authentication": {}
+    },
+    {
+      "_id": "req_06",
+      "_type": "request",
+      "parentId": "fld_vagas",
+      "name": "Registrar candidato na vaga",
+      "method": "POST",
+      "url": "{{ _.base_url }}/vagas/101/candidatos",
+      "description": "",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "parameters": [],
+      "metaSortKey": 11,
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Candidato Teste\",\n  \"scoreDiversidade\": 7.0\n}"
+      },
+      "authentication": {}
+    },
+    {
+      "_id": "req_07",
+      "_type": "request",
+      "parentId": "fld_colaboradores",
+      "name": "Listar treinamentos (filtro status)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/colaboradores/treinamentos?pagina=1&tamanho=10&status=pendente",
+      "description": "",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "parameters": [],
+      "metaSortKey": 12,
+      "authentication": {}
+    },
+    {
+      "_id": "req_08",
+      "_type": "request",
+      "parentId": "fld_health",
+      "name": "Health check",
+      "method": "GET",
+      "url": "{{ _.base_url }}/health",
+      "description": "",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "parameters": [],
+      "metaSortKey": 13,
+      "authentication": {}
+    }
+  ]
+}

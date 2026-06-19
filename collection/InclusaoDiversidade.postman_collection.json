@@ -1,0 +1,342 @@
+{
+  "info": {
+    "name": "Inclusão & Diversidade API",
+    "_postman_id": "a1b2c3d4-0000-4000-8000-inclusaodiv01",
+    "description": "Coleção de testes da API ESG (FIAP). 'Gerar token' salva o JWT em {{token}} automaticamente.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Gerar token (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/token",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "token"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var data = pm.response.json();",
+                  "if (data && data.access_token) {",
+                  "    pm.collectionVariables.set('token', data.access_token);",
+                  "    console.log('Token salvo na variável {{token}}.');",
+                  "}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Departamentos",
+      "item": [
+        {
+          "name": "Listar departamentos (paginado)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/departamentos?pagina=1&tamanho=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "departamentos"
+              ],
+              "query": [
+                {
+                  "key": "pagina",
+                  "value": "1"
+                },
+                {
+                  "key": "tamanho",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Vagas",
+      "item": [
+        {
+          "name": "Abrir vaga (Administrador)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/vagas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "vagas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cargo\": \"Pessoa Desenvolvedora Jr\",\n  \"fkDep\": 1,\n  \"flagAfirmativa\": \"S\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Atualizar status -> PREENCHIDA (Administrador)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/vagas/101/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "vagas",
+                "101",
+                "status"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"PREENCHIDA\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar candidatos da vaga (ordenado por score)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/vagas/101/candidatos?pagina=1&tamanho=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "vagas",
+                "101",
+                "candidatos"
+              ],
+              "query": [
+                {
+                  "key": "pagina",
+                  "value": "1"
+                },
+                {
+                  "key": "tamanho",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Registrar candidato na vaga",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/vagas/101/candidatos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "vagas",
+                "101",
+                "candidatos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Candidato Teste\",\n  \"scoreDiversidade\": 7.0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Colaboradores",
+      "item": [
+        {
+          "name": "Listar treinamentos (filtro status)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/colaboradores/treinamentos?pagina=1&tamanho=10&status=pendente",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "colaboradores",
+                "treinamentos"
+              ],
+              "query": [
+                {
+                  "key": "pagina",
+                  "value": "1"
+                },
+                {
+                  "key": "tamanho",
+                  "value": "10"
+                },
+                {
+                  "key": "status",
+                  "value": "pendente"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}

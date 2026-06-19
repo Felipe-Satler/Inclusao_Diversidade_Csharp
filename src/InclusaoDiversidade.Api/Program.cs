@@ -6,7 +6,9 @@ using InclusaoDiversidade.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
 // ---------------------------------------------------------------------------
-// Registro de serviços (composição das camadas)
+// Composição das camadas
+//   AddApplication    → validators e serviços de aplicação
+//   AddInfrastructure → DbContext (Oracle), serviços de negócio e JWT
 // ---------------------------------------------------------------------------
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -25,7 +27,7 @@ var app = builder.Build();
 // Pipeline HTTP
 // ---------------------------------------------------------------------------
 
-// Tratamento global de exceções (deve vir cedo no pipeline)
+// Tratamento global de exceções (cedo no pipeline)
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
