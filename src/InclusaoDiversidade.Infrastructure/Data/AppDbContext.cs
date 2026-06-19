@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+﻿using System;
+using System.Collections.Generic;
+>>>>>>> 9afd1eb92a612d68c42265b614376f950340cdde
 using Microsoft.EntityFrameworkCore;
 using InclusaoDiversidade.Domain;
 
@@ -183,4 +188,8 @@ public partial class AppDbContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 9afd1eb92a612d68c42265b614376f950340cdde

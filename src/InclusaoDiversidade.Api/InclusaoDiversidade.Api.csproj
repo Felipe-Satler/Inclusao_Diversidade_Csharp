@@ -14,6 +14,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
     <PackageReference Include="Oracle.EntityFrameworkCore" Version="8.*" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+<<<<<<< HEAD
+=======
+    <!-- Necessário para rodar `dotnet ef` a partir do projeto de startup -->
+>>>>>>> 9afd1eb92a612d68c42265b614376f950340cdde
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.*">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

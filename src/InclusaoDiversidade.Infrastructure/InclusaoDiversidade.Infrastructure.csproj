@@ -6,6 +6,10 @@
   -->
 
   <ItemGroup>
+<<<<<<< HEAD
+=======
+    <!-- EF Core (núcleo, independente de provider) -->
+>>>>>>> 9afd1eb92a612d68c42265b614376f950340cdde
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.28" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -17,6 +21,17 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Oracle.EntityFrameworkCore" Version="8.*" />
+<<<<<<< HEAD
+=======
+
+    <!-- ===================================================================== -->
+    <!-- TODO (etapa de banco): descomente APENAS o provider escolhido.         -->
+    <!-- Opção Oracle (banco da FIAP):                                          -->
+    <!-- <PackageReference Include="Oracle.EntityFrameworkCore" Version="8.23.40" /> -->
+    <!-- Opção SQL Server (local / Visual Studio):                              -->
+    <!-- <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" /> -->
+    <!-- ===================================================================== -->
+>>>>>>> 9afd1eb92a612d68c42265b614376f950340cdde
 
     <!-- Autenticação: geração de tokens JWT -->
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.2" />

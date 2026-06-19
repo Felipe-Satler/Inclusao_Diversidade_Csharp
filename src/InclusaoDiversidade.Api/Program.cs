@@ -1,9 +1,24 @@
+using Microsoft.EntityFrameworkCore;
 using InclusaoDiversidade.Api.Extensions;
 using InclusaoDiversidade.Api.Middleware;
 using InclusaoDiversidade.Application;
 using InclusaoDiversidade.Infrastructure;
+using InclusaoDiversidade.Infrastructure.Data; // <-- Comentado temporariamente
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Pega a string do appsettings.json
+var connectionString = builder.Configuration.GetConnectionString("OracleConnection");
+
+// ---------------------------------------------------------------------------
+// 🚨 ATENÇÃO: BLOCO COMENTADO TEMPORARIAMENTE PARA O SCAFFOLD RODAR
+// Como apagamos o AppDbContext para o EF recriá-lo, o projeto precisa compilar sem ele primeiro.
+// Descomente este bloco DEPOIS que o comando scaffold gerar as classes com sucesso!
+// ---------------------------------------------------------------------------
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseOracle(connectionString));
+
 
 // ---------------------------------------------------------------------------
 // Composição das camadas
