@@ -10,6 +10,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Pega a string do appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("OracleConnection");
 
+<<<<<<< HEAD
+=======
+// ---------------------------------------------------------------------------
+// 🚨 ATENÇÃO: BLOCO COMENTADO TEMPORARIAMENTE PARA O SCAFFOLD RODAR
+// Como apagamos o AppDbContext para o EF recriá-lo, o projeto precisa compilar sem ele primeiro.
+// Descomente este bloco DEPOIS que o comando scaffold gerar as classes com sucesso!
+// ---------------------------------------------------------------------------
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseOracle(connectionString));
+
+
+>>>>>>> 9afd1eb92a612d68c42265b614376f950340cdde
 // ---------------------------------------------------------------------------
 // 🚨 ATENÇÃO: BLOCO COMENTADO TEMPORARIAMENTE PARA O SCAFFOLD RODAR
 // Como apagamos o AppDbContext para o EF recriá-lo, o projeto precisa compilar sem ele primeiro.

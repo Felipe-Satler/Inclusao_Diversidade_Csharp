@@ -9,6 +9,9 @@
 <<<<<<< HEAD
 =======
     <!-- EF Core (núcleo, independente de provider) -->
+<<<<<<< HEAD
+>>>>>>> 9afd1eb92a612d68c42265b614376f950340cdde
+=======
 >>>>>>> 9afd1eb92a612d68c42265b614376f950340cdde
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.28" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
@@ -22,7 +25,10 @@
     </PackageReference>
     <PackageReference Include="Oracle.EntityFrameworkCore" Version="8.*" />
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 9afd1eb92a612d68c42265b614376f950340cdde
 
     <!-- ===================================================================== -->
     <!-- TODO (etapa de banco): descomente APENAS o provider escolhido.         -->
