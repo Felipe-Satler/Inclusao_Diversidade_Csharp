@@ -1,0 +1,16 @@
+<Project>
+
+  <!--
+    Propriedades compartilhadas por TODOS os projetos da solução.
+    Centralizar aqui evita repetir TargetFramework/Nullable em cada .csproj.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+</Project>

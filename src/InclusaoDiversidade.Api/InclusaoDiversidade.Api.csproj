@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <!--
+    Camada de Apresentação (View no MVVM): controllers RESTful.
+    Projeto de inicialização (startup) e usado pelo dotnet ef.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Habilita dotnet user-secrets para manter a connection string fora do repositório -->
+    <UserSecretsId>inclusao-diversidade-api</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
+    <PackageReference Include="Oracle.EntityFrameworkCore" Version="8.23.90" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+
+    <!-- Necessário para rodar dotnet ef a partir do projeto de startup -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InclusaoDiversidade.Application\InclusaoDiversidade.Application.csproj" />
+    <ProjectReference Include="..\InclusaoDiversidade.Infrastructure\InclusaoDiversidade.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
