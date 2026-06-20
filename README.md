@@ -168,17 +168,82 @@ O script `database/script_inclusao_diversidade.sql` cria as tabelas, as sequence
 
 ## Migrações do EF Core
 
-O projeto é **database-first** (o banco já existe). Caso precise gerar migrações:
+O projeto está **pronto para migrações**. Há uma fábrica de design-time
+(`AppDbContextFactory`) que permite ao `dotnet ef` instanciar o `AppDbContext`
+sem subir a API — isso evita o erro *"Unable to create an object of type 'AppDbContext'"*
+comum com hosting mínimo.
+
+### Pré-requisito (CLI)
 
 ```bash
-dotnet ef migrations add NomeDaMigration \
-  --project src/InclusaoDiversidade.Infrastructure \
-  --startup-project src/InclusaoDiversidade.Api
+dotnet tool install --global dotnet-ef --version 8.*
+# (ou, se já tiver: dotnet tool update --global dotnet-ef --version 8.*)
+```
 
-dotnet ef database update \
-  --project src/InclusaoDiversidade.Infrastructure \
+> No Visual Studio, dá para usar o *Package Manager Console* (`Add-Migration`,
+> `Update-Database`) graças ao pacote `Microsoft.EntityFrameworkCore.Tools`.
+
+### 1) Gerar a migração inicial
+
+```bash
+dotnet ef migrations add InitialCreate ^
+  --project src/InclusaoDiversidade.Infrastructure ^
+  --startup-project src/InclusaoDiversidade.Api ^
+  --output-dir Persistence/Migrations
+```
+
+(no Linux/macOS troque `^` por `\`). Isso cria, em
+`src/InclusaoDiversidade.Infrastructure/Persistence/Migrations`, os arquivos
+`<timestamp>_InitialCreate.cs` e o `AppDbContextModelSnapshot.cs` com todo o
+esquema (tabelas, sequences, chaves e defaults). `migrations add` **não** conecta
+no banco — apenas lê o modelo.
+
+### 2) Aplicar a migração
+
+**Cenário A — banco vazio/limpo** (cria todo o esquema do zero):
+
+```bash
+dotnet ef database update ^
+  --project src/InclusaoDiversidade.Infrastructure ^
   --startup-project src/InclusaoDiversidade.Api
 ```
+
+**Cenário B — banco da FIAP que já tem as tabelas** (criadas na Fase 2 / script SQL):
+aplicar do jeito acima daria erro `ORA-00955 (name already used)`, pois as tabelas
+já existem. Nesse caso faça o **baseline** (registrar a migração como aplicada sem
+recriar nada):
+
+1. Abra o arquivo `<timestamp>_InitialCreate.cs` gerado.
+2. **Comente todo o corpo do método `Up(...)`** (deixe-o vazio).
+3. Rode o `database update` acima — ele só cria a tabela de controle
+   `__EFMigrationsHistory` e marca a `InitialCreate` como aplicada, **sem** mexer
+   nas tabelas existentes.
+4. **Descomente** o corpo do `Up(...)`. A partir daí, novas migrações funcionam
+   normalmente (`add` + `update`).
+
+> **Triggers:** o EF gera apenas o esquema de tabelas/sequences — as 4 triggers
+> PL/SQL continuam vindo de `database/script_inclusao_diversidade.sql`. Em um banco
+> limpo, rode o script (ou ao menos a parte das triggers) após o `database update`.
+> Opcionalmente, dá para versioná-las também via migração usando
+> `migrationBuilder.Sql("CREATE OR REPLACE TRIGGER ...")`.
+
+### 3) Próximas migrações
+
+Alterou alguma entidade/mapeamento? Basta:
+
+```bash
+dotnet ef migrations add NomeDaMudanca ^
+  --project src/InclusaoDiversidade.Infrastructure ^
+  --startup-project src/InclusaoDiversidade.Api ^
+  --output-dir Persistence/Migrations
+dotnet ef database update ^
+  --project src/InclusaoDiversidade.Infrastructure ^
+  --startup-project src/InclusaoDiversidade.Api
+```
+
+> A connection string usada pelo `dotnet ef` vem da variável de ambiente
+> `ConnectionStrings__OracleConnection` (se definida) ou da string padrão na
+> `AppDbContextFactory`.
 
 ## Coleção de testes (Insomnia/Postman)
 
